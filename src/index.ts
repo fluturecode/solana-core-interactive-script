@@ -21,6 +21,10 @@ async function initializeKeypair(connection: Web3.Connection): Promise<Web3.Keyp
   }
 
   async function main() {
+    const connection = new Web3.Connection(Web3.clusterApiUrl('devnet'));
+    const signer = await initializeKeypair(connection);
+
+    console.log('Public key:', signer.publicKey.toBase58());
 }
 
 main()

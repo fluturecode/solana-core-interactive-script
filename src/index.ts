@@ -17,13 +17,14 @@ async function initializeKeypair(connection: Web3.Connection): Promise<Web3.Keyp
 
         console.log('Creating .env file');
         fs.writeFileSync('.env', `PRIVATE_KEY=[${signer.secretKey.toString()}]`);
-
+        await airdropSolIfNeeded(signer, connection);
         return signer;
     }
 
     const secret = JSON.parse(process.env.PRIVATE_KEY ?? '') as number[];
     const secretKey = Uint8Array.from(secret);
     const keypairFromSecret = Web3.Keypair.fromSecretKey(secretKey);
+    await airdropSolIfNeeded(keypairFromSecret, connection);
     return keypairFromSecret;
 }
 
@@ -54,6 +55,7 @@ async function airdropSolIfNeeded(
         console.log('New balance is', newBalance / Web3.LAMPORTS_PER_SOL, 'SOL');
     }
 }
+
 main()
     .then(() => {
     console.log('Finished successfully');
